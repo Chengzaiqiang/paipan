@@ -4,335 +4,30 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<title>易水成风 · 排盘</title>
-<link rel="icon" href="./assets/icon-192.png">
-<style>
-  :root{
-    --bg:#ffffff;
-    --ink:#222222;
-    --muted:#777777;
-    --line:#e6e6e6;
-    --line2:#d8d8d8;
-    --header:#f4f4f2;
-    --wash:#f7f7f5;
-    --sel:#f1efe8;
-    --accent:#222222;
-    --accent-deep:#000000;
-    --wood:#2f8a5e;
-    --fire:#c7442f;
-    --earth:#8a6a34;
-    --metal:#b08a2e;
-    --water:#2f6fa8;
-    --ss-bj:#2f8a5e;
-    --ss-ss:#c7442f;
-    --ss-cai:#a07c28;
-    --ss-gs:#2f6fa8;
-    --ss-yin:#7a5c8f;
-    --font-gz:"Songti SC","STSong","Noto Serif SC","SimSun",serif;
-    --font-ui:"PingFang SC","Microsoft YaHei",-apple-system,system-ui,sans-serif;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{
-    background:var(--bg);
-    color:var(--ink);
-    font:13px/1.6 var(--font-ui);
-    -webkit-font-smoothing:antialiased;
-    -webkit-text-size-adjust:100%;
-  }
-  ::selection{background:rgba(34,34,34,.12)}
-  a{color:inherit}
-  .serif{font-family:var(--font-gz)}
-
-  /* ---------- 顶栏 ---------- */
-  .top{
-    height:48px; padding:0 20px; display:flex; align-items:center; justify-content:space-between;
-    border-bottom:1px solid var(--line); background:#fff;
-  }
-  .brand{
-    font-family:var(--font-gz);
-    font-size:15px; letter-spacing:.14em; display:flex; align-items:baseline; gap:10px;
-  }
-  .brand em{font-style:normal; font-size:10.5px; letter-spacing:.2em; color:var(--muted)}
-  .back{
-    font-size:11px; letter-spacing:.04em; color:var(--muted); text-decoration:none;
-    padding:5px 0; border-bottom:1px solid transparent;
-  }
-  .back:hover{color:var(--ink); border-bottom-color:var(--ink)}
-
-  /* ---------- 布局 ---------- */
-  .wrap{
-    max-width:1180px; margin:0 auto; padding:24px 20px 72px;
-    display:grid; grid-template-columns:264px minmax(0,1fr); gap:36px; align-items:start;
-  }
-  .rail{position:sticky; top:20px}
-
-  /* ---------- 表单 ---------- */
-  .grp{margin-bottom:16px}
-  .lab{
-    font-size:10px; letter-spacing:.12em; color:var(--muted);
-    display:flex; align-items:center; gap:8px; margin-bottom:6px;
-  }
-  .lab::after{content:""; flex:1; height:1px; background:var(--line)}
-  .row{display:flex; align-items:baseline; gap:6px; flex-wrap:wrap; color:var(--muted); font-size:10.5px}
-  input[type=number], select{
-    height:28px; min-width:0; padding:0 2px;
-    background:transparent; color:var(--ink);
-    border:0; border-bottom:1px solid var(--line2); border-radius:0;
-    font-family:var(--font-ui); font-size:13px; outline:none;
-    font-variant-numeric:tabular-nums;
-  }
-  input[type=number]{width:52px}
-  input[type=number]::-webkit-outer-spin-button,
-  input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-  input[type=number]{-moz-appearance:textfield;appearance:textfield}
-  input::placeholder{color:#b5b5b5}
-  input:focus, select:focus{border-bottom-color:var(--ink)}
-  select{width:100%; font-size:12.5px; cursor:pointer}
-  select option{background:#fff; color:var(--ink)}
-  input[type=checkbox]{accent-color:var(--ink)}
-
-  .seg{display:flex; border-bottom:1px solid var(--line2)}
-  .seg button{
-    background:none; border:0; color:var(--muted); font-family:var(--font-ui); font-size:12.5px;
-    padding:4px 12px 6px; cursor:pointer; position:relative;
-  }
-  .seg button:hover{color:var(--ink)}
-  .seg button.on{color:var(--ink)}
-  .seg button.on::after{content:""; position:absolute; left:8px; right:8px; bottom:-1px; height:2px; background:var(--ink)}
-
-  .opts{display:flex; flex-direction:column; gap:8px}
-  .opts label{display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink); cursor:pointer}
-  .opts label span.k{color:var(--muted); font-size:10.5px; letter-spacing:.03em}
-  .opts select{width:auto; margin-left:auto; min-width:120px}
-
-  .go{
-    width:100%; height:38px; margin-top:2px;
-    background:var(--ink); color:#fff; border:0; border-radius:3px;
-    font:inherit; font-size:13.5px; letter-spacing:.3em; text-indent:.3em; cursor:pointer;
-    transition:background .18s ease;
-  }
-  .go:hover{background:var(--accent-deep)}
-  .rail-actions{display:flex; gap:8px; margin-top:10px}
-  .ghost{
-    flex:1; height:30px; background:none; color:var(--muted); font:inherit; font-size:11.5px;
-    border:1px solid var(--line2); border-radius:3px; cursor:pointer; letter-spacing:.04em;
-    transition:color .18s ease, border-color .18s ease;
-  }
-  .ghost:hover{color:var(--ink); border-color:var(--ink)}
-
-  .saved{margin-top:26px}
-  .hrow{
-    display:flex; align-items:baseline; gap:8px; padding:7px 0;
-    border-top:1px solid var(--line); font-size:11.5px; cursor:pointer; color:var(--muted);
-  }
-  .hrow:last-child{border-bottom:1px solid var(--line)}
-  .hrow b{font-weight:500; color:var(--ink); font-family:var(--font-gz); letter-spacing:.02em}
-  .hrow span{font-size:10px; font-variant-numeric:tabular-nums}
-  .hrow i{margin-left:auto; font-style:normal; color:#bbb; padding:0 2px; font-size:10.5px}
-  .hrow i:hover{color:var(--ink)}
-  .hrow:hover{background:var(--wash)}
-  .empty-hint{font-size:11px; color:var(--muted); line-height:1.8}
-
-  /* ---------- 舞台 ---------- */
-  .stage{min-width:0}
-  .hidden{display:none}
-
-  .empty{margin:100px auto 0; max-width:300px; text-align:center; color:var(--muted)}
-  .empty .mark{
-    font-family:var(--font-gz); font-size:76px; line-height:1;
-    color:transparent; -webkit-text-stroke:1px #dedede; user-select:none;
-  }
-  .empty p{font-size:12px; letter-spacing:.08em; margin:18px 0 0}
-
-  .meta{display:flex; flex-wrap:wrap; gap:4px 20px; font-size:11.5px; margin-bottom:12px}
-  .mi{display:inline-flex; align-items:baseline; gap:6px; white-space:nowrap}
-  .mi i{font-style:normal; color:var(--muted); font-size:10px; letter-spacing:.06em}
-  .mi b{font-weight:450; font-variant-numeric:tabular-nums}
-  .mi.hl b{color:var(--ink); font-weight:600}
-
-  .chart{
-    display:grid; grid-template-columns:64px repeat(4,minmax(0,1fr));
-    border:1px solid var(--line2); border-radius:2px; background:#fff;
-  }
-  .ch{
-    padding:4px 3px; min-width:0; text-align:center;
-    border-bottom:1px solid var(--line);
-  }
-  .ch.lab{
-    text-align:right; color:var(--muted); font-size:9.5px; letter-spacing:.06em;
-    padding-right:8px; border-right:1px solid var(--line); background:#fafaf8;
-  }
-  .ch.lab .sf{display:none}
-  .ch.h{
-    font-size:9.5px; letter-spacing:.16em; color:#666;
-    padding:5px 3px; background:var(--header);
-  }
-  .ch.h.day{color:var(--ink); font-weight:600}
-  .ch.dcol{background:#fbfbf9}
-  .ch.big{padding:5px 2px 4px}
-  .ch.last{border-bottom:0}
-
-  .gz{
-    font-family:var(--font-gz);
-    font-size:30px; line-height:1.2; font-weight:600;
-  }
-  .gz .wx-木{color:var(--wood)} .gz .wx-火{color:var(--fire)} .gz .wx-土{color:var(--earth)}
-  .gz .wx-金{color:var(--metal)} .gz .wx-水{color:var(--water)}
-  .ss{font-size:11px; letter-spacing:.02em}
-  .ss-bj{color:var(--ss-bj)} .ss-ss{color:var(--ss-ss)} .ss-cai{color:var(--ss-cai)}
-  .ss-gs{color:var(--ss-gs)} .ss-yin{color:var(--ss-yin)} .ss-me{color:#555}
-  .sm{font-size:12px; color:var(--ink)}
-  .tiny{font-size:9.5px; color:var(--muted); line-height:1.5}
-  .tiny .ss{font-size:9.5px}
-  .stack > div{line-height:1.45; white-space:nowrap}
-
-  .aux{display:flex; flex-wrap:wrap; gap:5px 20px; margin:10px 0 20px; font-size:11px; color:var(--muted)}
-  .aux b{font-weight:450; color:var(--ink); margin-left:6px}
-
-  .block-h{
-    display:flex; justify-content:space-between; align-items:baseline;
-    margin-bottom:6px; font-size:10px; letter-spacing:.14em; color:#666;
-  }
-  .block-h .hint{font-size:10px; letter-spacing:.02em; color:#999}
-
-  .dayun{
-    display:grid; grid-auto-flow:column; grid-auto-columns:minmax(66px,1fr);
-    overflow-x:auto; border-top:1px solid var(--line2); border-bottom:1px solid var(--line2);
-    scrollbar-width:thin;
-  }
-  .dy{
-    position:relative; padding:7px 3px 6px; text-align:center; cursor:pointer;
-    border-left:1px solid var(--line); transition:background .15s ease;
-  }
-  .dy:first-child{border-left:0}
-  .dy:hover{background:var(--wash)}
-  .dy.active{background:var(--sel)}
-  .dy.active::after{content:""; position:absolute; top:-1px; left:0; right:0; height:2px; background:var(--ink)}
-  .dy .age{font-size:9px; color:var(--muted); font-variant-numeric:tabular-nums}
-  .dy .gz2{font-family:var(--font-gz); font-size:21px; line-height:1.3; margin:1px 0}
-  .dy .ss2{font-size:9.5px}
-  .dy .yrs{font-size:9px; color:var(--muted); font-variant-numeric:tabular-nums; margin-top:1px}
-
-  .liunian{
-    display:grid; grid-auto-flow:column; grid-auto-columns:minmax(54px,1fr);
-    overflow-x:auto; border-top:1px solid var(--line2);
-  }
-  .dayun.ovf,.liunian.ovf,.liuyue.ovf,.liuri.ovf{
-    -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 22px),transparent);
-    mask-image:linear-gradient(90deg,#000 calc(100% - 22px),transparent);
-  }
-  .dayun.ovf.ovf-left,.liunian.ovf.ovf-left,.liuyue.ovf.ovf-left,.liuri.ovf.ovf-left{
-    -webkit-mask-image:linear-gradient(90deg,transparent,#000 20px,#000 calc(100% - 22px),transparent);
-    mask-image:linear-gradient(90deg,transparent,#000 20px,#000 calc(100% - 22px),transparent);
-  }
-  .ln{
-    padding:6px 3px 5px; text-align:center; border-left:1px solid var(--line); cursor:pointer;
-  }
-  .ln:first-child{border-left:0}
-  .ln:hover{background:var(--wash)}
-  .ln .y{font-size:8.5px; color:var(--muted); font-variant-numeric:tabular-nums}
-  .ln .g{font-family:var(--font-gz); font-size:16px; line-height:1.35}
-  .ln .s{font-size:9px; line-height:1.4}
-  .ln.cur{background:#faf8f2}
-  .ln.sel{background:var(--sel); box-shadow:inset 0 2px 0 var(--ink)}
-
-  .liuyue,.liuri{
-    display:grid; grid-auto-flow:column; overflow-x:auto; border-top:1px solid var(--line2);
-  }
-  .liuyue{grid-auto-columns:minmax(60px,1fr)}
-  .liuri{grid-auto-columns:minmax(50px,1fr)}
-  .ly,.lr{position:relative; text-align:center; border-left:1px solid var(--line); cursor:pointer}
-  .ly:first-child,.lr:first-child{border-left:0}
-  .ly{padding:6px 3px 5px}
-  .lr{padding:5px 2px 4px}
-  .ly:hover,.lr:hover{background:var(--wash)}
-  .ly .m{font-size:8.5px; color:var(--muted); letter-spacing:.02em}
-  .ly .g{font-family:var(--font-gz); font-size:16px; line-height:1.35}
-  .ly .s{font-size:9px; line-height:1.4}
-  .ly .d{font-size:8px; color:var(--muted); margin-top:1px}
-  .ly.cur .m{color:var(--ink); font-weight:600}
-  .ly.sel{background:var(--sel); box-shadow:inset 0 2px 0 var(--ink)}
-  .lr .y{font-size:8px; color:var(--muted); font-variant-numeric:tabular-nums}
-  .lr .g{font-family:var(--font-gz); font-size:14px; line-height:1.35}
-  .lr .s{font-size:8.5px; line-height:1.4}
-  .lr.cur .y{color:var(--ink); font-weight:600}
-  .lr.sel{background:var(--sel); box-shadow:inset 0 2px 0 var(--ink)}
-
-  .note{margin-top:20px; font-size:10px; line-height:1.8; color:#8a8a8a; max-width:62em}
-
-  /* 一次入场 */
-  @keyframes seat{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
-  #result.enter > .chart, #result.enter > .meta{animation:seat .22s ease-out both}
-  #result.enter > .chart{animation-delay:.02s}
-
-  @media (prefers-reduced-motion:reduce){
-    *,*::before,*::after{animation:none!important; transition:none!important}
-  }
-  :focus-visible{outline:2px solid var(--ink); outline-offset:2px}
-
-  /* ---------- 手机：字号再压一档 ---------- */
-  @media (max-width:880px){
-    .wrap{grid-template-columns:1fr; gap:24px; padding:16px 12px 48px}
-    .rail{position:static}
-    .top{height:44px; padding:0 12px}
-    .brand{font-size:14px}
-    .gz{font-size:23px}
-    .chart{grid-template-columns:42px repeat(4,minmax(0,1fr))}
-    .ch{padding:3px 2px}
-    .ch.big{padding:4px 1px 3px}
-    .ch.lab{font-size:8.5px; padding-right:5px; letter-spacing:0}
-    .ch.lab .lf{display:none}
-    .ch.lab .sf{display:inline}
-    .ch.h{font-size:8.5px; letter-spacing:.08em}
-    .ss{font-size:9.5px}
-    .tiny,.tiny .ss{font-size:8.5px}
-    .sm{font-size:10.5px}
-    .meta{font-size:11px; gap:3px 14px}
-    .meta .mi{white-space:normal}
-    .aux{font-size:10px; gap:4px 14px}
-    .dayun{grid-auto-columns:minmax(62px,1fr)}
-    .dy .gz2{font-size:19px}
-    .liunian{grid-auto-columns:minmax(48px,1fr)}
-    .liuyue{grid-auto-columns:minmax(64px,1fr)}
-    .liuri{grid-auto-columns:minmax(46px,1fr)}
-    .empty{margin-top:50px}
-  }
-  @media (max-width:420px){
-    .gz{font-size:21px}
-    input[type=number]{width:48px}
-  }
-
-  /* ---------- 打印 ---------- */
-  @media print{
-    .top,.rail,.note,.empty{display:none!important}
-    .wrap{display:block; padding:0; max-width:none}
-    .stage{padding-top:8mm}
-    .chart{border-color:#999}
-    .ch{border-color:#ccc}
-    .ch.lab,.ch.dcol,.ch.h{background:none}
-    .meta,.aux,.block-h,.dy .age,.dy .yrs,.ln .y,.ln .s{color:#333}
-    .block-h .hint{display:none}
-    .dayun.ovf,.liunian.ovf,.liuyue.ovf,.liuri.ovf,
-    .dayun.ovf-left,.liunian.ovf-left,.liuyue.ovf-left,.liuri.ovf-left{-webkit-mask-image:none;mask-image:none}
-    .ch.h.lab{border-right:0}
-    .liuyue{grid-auto-columns:minmax(0,1fr)}
-    .liuri{grid-template-columns:repeat(15,minmax(0,1fr)); grid-auto-flow:row; overflow:visible}
-    .ly .g{font-size:15px}
-    .lr .g{font-size:13px}
-  }
-</style>
+<title>问道 · 八字排盘</title>
+<link rel="icon" href="./assets/paipan-icon-192.png">
+<link rel="stylesheet" href="./paipan.css">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="排盘">
+<meta name="apple-mobile-web-app-title" content="问道">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="./manifest.webmanifest">
-<link rel="apple-touch-icon" href="./assets/icon-192.png">
+<link rel="apple-touch-icon" href="./assets/paipan-icon-192.png">
 </head>
 <body>
 
 <header class="top">
-  <div class="brand serif">易水成风 <em>排盘</em></div>
+  <div class="brand serif">问道 <em>道法自然 · 排盘</em></div>
+  <div class="top-right">
+    <label class="skinchip"><span>皮肤</span>
+      <select id="themeSel" aria-label="切换风格">
+        <option value="wz">问道 · 白</option>
+        <option value="ink">墨盘 · 深</option>
+        <option value="paper">命书 · 纸</option>
+        <option value="celadon">青绿 · 绢</option>
+      </select>
+    </label>
+  </div>
 </header>
 
 <main class="wrap">
@@ -401,12 +96,8 @@
         <button type="button" class="ghost" id="saveBtn">保存命例</button>
         <button type="button" class="ghost" id="printBtn">打印</button>
       </div>
+      <a class="ghost histlink" href="history.html">历史记录</a>
     </form>
-
-    <div class="saved">
-      <div class="lab">已存命例</div>
-      <div id="history"></div>
-    </div>
   </aside>
 
   <section class="stage">
@@ -615,6 +306,25 @@
   });
   bindSeg('#sexSeg', function(v){ state.sex = +v; });
 
+  // ---- 主题 ----
+  var THEME_BG = { wz:'#ffffff', ink:'#0e1412', paper:'#f1f2ec', celadon:'#e7ece4' };
+  function applyTheme(t){
+    if(!THEME_BG[t]) t = 'wz';
+    document.body.setAttribute('data-theme', t);
+    var m = document.querySelector('meta[name="theme-color"]');
+    if(m) m.setAttribute('content', THEME_BG[t]);
+    var sel = $('#themeSel');
+    if(sel) sel.value = t;
+    try{ localStorage.setItem('paipan_theme', t); }catch(e){}
+  }
+  (function initTheme(){
+    var t = 'wz';
+    try{ t = localStorage.getItem('paipan_theme') || 'wz'; }catch(e){}
+    applyTheme(t);
+    var sel = $('#themeSel');
+    if(sel) sel.addEventListener('change', function(){ applyTheme(sel.value); });
+  })();
+
   function pad(n){ return (n < 10 ? '0' : '') + n; }
 
   function eqTimeMinutes(dt){
@@ -747,6 +457,10 @@
     });
   }
 
+  function gzVert(gz){
+    return '<div class="g"><i>' + gz.charAt(0) + '</i><i>' + gz.charAt(1) + '</i></div>';
+  }
+
   function gzColor(ch){
     return 'wx-' + (GAN_WX[ch] || ZHI_WX[ch] || '');
   }
@@ -841,8 +555,7 @@
       $('#dayun').innerHTML = out.dyList.map(function(d, i){
         return '<div class="dy' + (i === curIdx ? ' active' : '') + '" data-i="' + i + '" role="button" tabindex="0">' +
           '<div class="age">' + d.startAge + '–' + d.endAge + ' 岁</div>' +
-          '<div class="gz2">' + d.ganZhi + '</div>' +
-          '<div class="ss2">' + ssHtml(d.ss) + '</div>' +
+          '<div class="gzwrap"><div class="gz2"><i>' + d.ganZhi.charAt(0) + '</i><i>' + d.ganZhi.charAt(1) + '</i></div><div class="ss2">' + ssHtml(d.ss) + '</div></div>' +
           '<div class="yrs">' + d.startYear + '–' + d.endYear + '</div>' +
         '</div>';
       }).join('');
@@ -864,8 +577,7 @@
         if(ln.year === selYear) cls += ' sel';
         return '<div class="' + cls + '" data-year="' + ln.year + '">' +
           '<div class="y">' + ln.year + ' · ' + ln.age + '岁</div>' +
-          '<div class="g">' + ln.ganZhi + '</div>' +
-          '<div class="s">' + ssHtml(ln.ss) + '</div>' +
+          '<div class="cellrow">' + gzVert(ln.ganZhi) + '<div class="s">' + ssHtml(ln.ss) + '</div></div>' +
         '</div>';
       }).join('');
       centerIn($('#liunian'), '.sel');
@@ -904,8 +616,7 @@
         }
         return '<div class="' + cls + '" data-mi="' + i + '">' +
           '<div class="m">' + m.label + '</div>' +
-          '<div class="g">' + m.gz + '</div>' +
-          '<div class="s">' + ssHtml(shiShen(out.dayGan, m.gan)) + '</div>' +
+          '<div class="cellrow">' + gzVert(m.gz) + '<div class="s">' + ssHtml(shiShen(out.dayGan, m.gan)) + '</div></div>' +
           '<div class="d">' + m.jie + (md ? ' ' + md : '') + '</div>' +
         '</div>';
       }).join('');
@@ -932,8 +643,7 @@
         if(i === selDayIdx) cls += ' sel';
         return '<div class="' + cls + '" data-di="' + i + '">' +
           '<div class="y">' + d.md + '</div>' +
-          '<div class="g">' + d.gz + '</div>' +
-          '<div class="s">' + ssHtml(shiShen(out.dayGan, d.gan)) + '</div>' +
+          '<div class="cellrow">' + gzVert(d.gz) + '<div class="s">' + ssHtml(shiShen(out.dayGan, d.gan)) + '</div></div>' +
         '</div>';
       }).join('');
       centerIn($('#liuri'), '.sel');
@@ -1025,33 +735,6 @@
     try{ localStorage.setItem(LKEY, JSON.stringify(readForm())); }catch(e){}
   }
 
-  function loadHistory(){
-    var arr = [];
-    try{ arr = JSON.parse(localStorage.getItem(HKEY) || '[]'); }catch(e){}
-    var box = $('#history');
-    if(!arr.length){ box.innerHTML = '<div class="empty-hint">排盘后点「保存命例」，这里会留下来。</div>'; return; }
-    box.innerHTML = arr.map(function(it, i){
-      return '<div class="hrow" data-i="' + i + '">' +
-        '<b>' + it.label + '</b><span>' + it.sub + '</span>' +
-        '<i data-del="' + i + '" title="删除">✕</i></div>';
-    }).join('');
-    box.onclick = function(e){
-      var del = e.target.closest('[data-del]');
-      if(del){
-        var idx = +del.getAttribute('data-del');
-        arr.splice(idx, 1);
-        localStorage.setItem(HKEY, JSON.stringify(arr));
-        loadHistory();
-        return;
-      }
-      var el = e.target.closest('.hrow');
-      if(!el) return;
-      var item = arr[+el.getAttribute('data-i')];
-      applyForm(item.form);
-      try{ calc(); }catch(err){ alert(err.message); }
-    };
-  }
-
   $('#saveBtn').addEventListener('click', function(){
     if($('#result').classList.contains('hidden')){ alert('先排盘再保存'); return; }
     var label = (lastOut ? lastOut.pillars.map(function(p){ return p.gan + p.zhi; }).join(' ') : '命例') +
@@ -1062,7 +745,9 @@
     arr.unshift({ label:label, sub:sub, form:readForm(), ts:Date.now() });
     arr = arr.slice(0, 40);
     localStorage.setItem(HKEY, JSON.stringify(arr));
-    loadHistory();
+    var btn = $('#saveBtn'), old = btn.textContent;
+    btn.textContent = '已保存';
+    setTimeout(function(){ btn.textContent = old; }, 1200);
   });
 
   $('#printBtn').addEventListener('click', function(){ window.print(); });
@@ -1074,11 +759,20 @@
   });
 
   (function restore(){
+    var open = null;
+    try{
+      open = JSON.parse(localStorage.getItem('paipan_open') || 'null');
+      localStorage.removeItem('paipan_open');
+    }catch(e){}
     var v = null;
     try{ v = JSON.parse(localStorage.getItem(LKEY) || 'null'); }catch(e){}
+    if(open){
+      applyForm(open);
+      try{ calc(); }catch(err){ alert(err.message || String(err)); }
+      return;
+    }
     if(v){ applyForm(v); }
     else { $('#y').value = 1990; $('#m').value = 1; $('#d').value = 1; }
-    loadHistory();
   })();
 })();
 </script>

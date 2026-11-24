@@ -1,5 +1,5 @@
-const CACHE = 'paipan-v2';
-const ASSETS = ['./', './index.html', './vendor/lunar.js', './manifest.webmanifest', './assets/icon-192.png', './assets/icon-512.png'];
+const CACHE = 'paipan-v3';
+const ASSETS = ['./', './index.html', './history.html', './paipan.css', './vendor/lunar.js', './manifest.webmanifest', './assets/paipan-icon-192.png', './assets/paipan-icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
