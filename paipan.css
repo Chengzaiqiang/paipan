@@ -239,6 +239,8 @@ input[type=checkbox]{accent-color:var(--accent)}
 .dy .gzwrap{display:flex; align-items:center; justify-content:center; gap:5px; margin:2px 0 1px}
 .dy .gz2{display:flex; flex-direction:column; line-height:1.05; font-family:var(--font-gz); font-weight:600; font-size:21px}
 .dy .gz2 i{font-style:normal; display:block}
+.dy .g{font-size:21px}
+.dy .g .ss{font-size:10px}
 .dy .ss2{font-size:10px; line-height:1}
 .dy .yrs{font-size:9px; color:var(--muted); font-variant-numeric:tabular-nums; margin-top:2px}
 
@@ -267,7 +269,10 @@ input[type=checkbox]{accent-color:var(--accent)}
 .cellrow{display:flex; align-items:center; justify-content:center; gap:3px}
 .g{display:flex; flex-direction:column; line-height:1.1; font-family:var(--font-gz); font-weight:600}
 .g i{font-style:normal; display:block}
+.g .gl{display:flex; align-items:center; justify-content:center; gap:3px}
+.g em{font-style:normal; font-family:var(--font-ui); font-weight:400; line-height:1}
 .ln .g{font-size:16px}
+.ln .g .ss{font-size:9px}
 .ln .s,.ly .s,.lr .s{line-height:1}
 .ln .s{font-size:9.5px}
 
@@ -283,12 +288,14 @@ input[type=checkbox]{accent-color:var(--accent)}
 .ly:hover,.lr:hover{background:var(--wash)}
 .ly .m{font-size:8.5px; color:var(--muted); letter-spacing:.02em}
 .ly .g{font-size:16px}
+.ly .g .ss{font-size:9px}
 .ly .s{font-size:9.5px}
 .ly .d{font-size:8px; color:var(--muted); margin-top:1px}
 .ly.cur .m{color:var(--ink); font-weight:600}
 .ly.sel{background:var(--sel); box-shadow:inset 0 2px 0 var(--accent)}
 .lr .y{font-size:8px; color:var(--muted); font-variant-numeric:tabular-nums}
 .lr .g{font-size:13px}
+.lr .g .ss{font-size:8px}
 .lr .s{font-size:8.5px}
 .lr.cur .y{color:var(--ink); font-weight:600}
 .lr.sel{background:var(--sel); box-shadow:inset 0 2px 0 var(--accent)}
@@ -354,6 +361,12 @@ input[type=checkbox]{accent-color:var(--accent)}
   .aux{font-size:10px; gap:4px 14px}
   .dayun{grid-auto-columns:minmax(62px,1fr)}
   .dy .gz2{font-size:19px}
+  .dy .g{font-size:19px}
+  .dy .g .ss{font-size:9px}
+  .ln .g{font-size:15px}
+  .ln .g .ss{font-size:8.5px}
+  .ly .g .ss{font-size:8.5px}
+  .lr .g .ss{font-size:7.5px}
   .liunian{grid-auto-columns:minmax(48px,1fr)}
   .liuyue{grid-auto-columns:minmax(62px,1fr)}
   .liuri{grid-auto-columns:minmax(46px,1fr)}

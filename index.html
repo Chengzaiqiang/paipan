@@ -461,10 +461,22 @@
     });
   }
 
-  function gzVert(gz){
+  var ZHI_BENQI = {子:'癸',丑:'己',寅:'甲',卯:'乙',辰:'戊',巳:'丙',午:'丁',未:'己',申:'庚',酉:'辛',戌:'戊',亥:'壬'};
+  function zhiShiShen(dayGan, zhi){
+    return shiShen(dayGan, ZHI_BENQI[zhi] || '');
+  }
+  function ssShort(name){ return SS_SHORT[name] || name; }
+
+  // 干支竖排，干、支各标一个十神简写（支按本气藏干）
+  function gzVert(gz, dayGan){
+    var g = gz.charAt(0), z = gz.charAt(1);
+    var gs = shiShen(dayGan, g), zs = zhiShiShen(dayGan, z);
     return '<div class="g">' +
-      '<i class="' + gzColor(gz.charAt(0)) + '">' + gz.charAt(0) + '</i>' +
-      '<i class="' + gzColor(gz.charAt(1)) + '">' + gz.charAt(1) + '</i></div>';
+      '<span class="gl"><i class="' + gzColor(g) + '">' + g + '</i>' +
+        '<em class="ss ' + ssCls(gs) + '">' + ssShort(gs) + '</em></span>' +
+      '<span class="gl"><i class="' + gzColor(z) + '">' + z + '</i>' +
+        '<em class="ss ' + ssCls(zs) + '">' + ssShort(zs) + '</em></span>' +
+    '</div>';
   }
 
   function gzColor(ch){
@@ -557,7 +569,7 @@
       $('#dayun').innerHTML = out.dyList.map(function(d, i){
         return '<div class="dy' + (i === curIdx ? ' active' : '') + '" data-i="' + i + '" role="button" tabindex="0">' +
           '<div class="age">' + d.startAge + '–' + d.endAge + ' 岁</div>' +
-          '<div class="gzwrap"><div class="gz2"><i class="' + gzColor(d.ganZhi.charAt(0)) + '">' + d.ganZhi.charAt(0) + '</i><i class="' + gzColor(d.ganZhi.charAt(1)) + '">' + d.ganZhi.charAt(1) + '</i></div><div class="ss2">' + ssShortHtml(d.ss) + '</div></div>' +
+          gzVert(d.ganZhi, out.dayGan) +
           '<div class="yrs">' + d.startYear + '–' + d.endYear + '</div>' +
         '</div>';
       }).join('');
@@ -579,7 +591,7 @@
         if(ln.year === selYear) cls += ' sel';
         return '<div class="' + cls + '" data-year="' + ln.year + '">' +
           '<div class="y">' + ln.year + ' · ' + ln.age + '岁</div>' +
-          '<div class="cellrow">' + gzVert(ln.ganZhi) + '<div class="s">' + ssShortHtml(ln.ss) + '</div></div>' +
+          gzVert(ln.ganZhi, out.dayGan) +
         '</div>';
       }).join('');
       centerIn($('#liunian'), '.sel');
@@ -618,7 +630,7 @@
         }
         return '<div class="' + cls + '" data-mi="' + i + '">' +
           '<div class="m">' + m.label + '</div>' +
-          '<div class="cellrow">' + gzVert(m.gz) + '<div class="s">' + ssShortHtml(shiShen(out.dayGan, m.gan)) + '</div></div>' +
+          gzVert(m.gz, out.dayGan) +
           '<div class="d">' + m.jie + (md ? ' ' + md : '') + '</div>' +
         '</div>';
       }).join('');
@@ -645,7 +657,7 @@
         if(i === selDayIdx) cls += ' sel';
         return '<div class="' + cls + '" data-di="' + i + '">' +
           '<div class="y">' + d.md + '</div>' +
-          '<div class="cellrow">' + gzVert(d.gz) + '<div class="s">' + ssShortHtml(shiShen(out.dayGan, d.gan)) + '</div></div>' +
+          gzVert(d.gz, out.dayGan) +
         '</div>';
       }).join('');
       centerIn($('#liuri'), '.sel');
