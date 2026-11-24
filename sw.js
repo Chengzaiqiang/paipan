@@ -1,5 +1,5 @@
-const CACHE = 'paipan-v5';
-const ASSETS = ['./', './index.html', './history.html', './paipan.css', './vendor/lunar.js', './manifest.webmanifest', './assets/paipan-icon-192.png', './assets/paipan-icon-512.png'];
+const CACHE = 'paipan-v6';
+const ASSETS = ['./', './index.html', './history.html', './paipan.css?v=6', './vendor/lunar.js', './manifest.webmanifest', './assets/paipan-icon-192.png', './assets/paipan-icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
@@ -8,9 +8,19 @@ self.addEventListener('activate', e => {
 });
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  const u = new URL(e.request.url);
+  const fresh = e.request.mode === 'navigate' || /\.(html|css|js|webmanifest)$/.test(u.pathname);
+  if (fresh) {
+    e.respondWith(fetch(e.request).then(res => {
+      const copy = res.clone();
+      caches.open(CACHE).then(c => c.put(e.request, copy));
+      return res;
+    }).catch(() => caches.match(e.request).then(r => r || caches.match('./index.html'))));
+    return;
+  }
   e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
     const copy = res.clone();
     caches.open(CACHE).then(c => c.put(e.request, copy));
     return res;
-  }).catch(() => caches.match('./index.html'))));
+  })));
 });

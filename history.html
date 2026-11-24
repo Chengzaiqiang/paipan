@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#ffffff">
 <title>问道 · 排盘历史</title>
 <link rel="icon" href="./assets/paipan-icon-192.png">
-<link rel="stylesheet" href="./paipan.css">
+<link rel="stylesheet" href="./paipan.css?v=6">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="问道">
 <link rel="manifest" href="./manifest.webmanifest">
@@ -118,7 +118,7 @@
 </script>
 <script>
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost' || location.hostname==='127.0.0.1')){
-  navigator.serviceWorker.register('./sw.js');
+  navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' });
 }
 </script>
 </body>
