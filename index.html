@@ -124,8 +124,8 @@
       <div class="liuri" id="liuri"></div>
 
       <div class="note">
-        神煞按通用排法计算，清娟体系是否采用以法本为准；起运按「三天折一年」常规历法计算，
-        体系若另有大运起运约定，需以老师说法为准。流月按节气（立春、惊蛰…）分月，流日为公历日。
+        起运按「三天折一年」常规历法计算，体系若另有大运起运约定，需以老师说法为准；
+      流月按节气（立春、惊蛰…）分月，流日为公历日。
       </div>
     </div>
   </section>
@@ -181,6 +181,10 @@
   }
   function ssHtml(name){
     return '<span class="ss ' + ssCls(name) + '">' + name + '</span>';
+  }
+  var SS_SHORT = {比肩:'比',劫财:'劫',食神:'食',伤官:'伤',偏财:'才',正财:'财',七杀:'杀',正官:'官',偏印:'枭',正印:'印'};
+  function ssShortHtml(name){
+    return '<span class="ss ' + ssCls(name) + '">' + (SS_SHORT[name] || name) + '</span>';
   }
 
   // 通用神煞（参考，是否采用以法本为准）
@@ -458,7 +462,9 @@
   }
 
   function gzVert(gz){
-    return '<div class="g"><i>' + gz.charAt(0) + '</i><i>' + gz.charAt(1) + '</i></div>';
+    return '<div class="g">' +
+      '<i class="' + gzColor(gz.charAt(0)) + '">' + gz.charAt(0) + '</i>' +
+      '<i class="' + gzColor(gz.charAt(1)) + '">' + gz.charAt(1) + '</i></div>';
   }
 
   function gzColor(ch){
@@ -488,20 +494,17 @@
     meta.push(mi('日主', out.dayGan + '（' + GAN_WX[out.dayGan] + '）'));
     $('#meta').innerHTML = meta.join('');
 
-    // 四柱
+    // 四柱（清娟体系只看四柱与藏干）
     var rows = [
       { lab:'主星', cls:'ss', get:function(p){ return ssHtml(p.ss); } },
       { lab:'天干', cls:'gz big', get:function(p){ return '<span class="' + gzColor(p.gan) + '">' + p.gan + '</span>'; } },
       { lab:'地支', cls:'gz big', get:function(p){ return '<span class="' + gzColor(p.zhi) + '">' + p.zhi + '</span>'; } },
-      { lab:'藏干', cls:'sm stack', get:function(p){ return p.hide.map(function(h){ return '<div>' + h + '</div>'; }).join(''); } },
-      { lab:'副星', cls:'tiny stack', get:function(p){ return p.hideSS.map(function(h){ return '<div>' + ssHtml(h) + '</div>'; }).join(''); } },
-      { lab:'星运', cls:'sm', get:function(p){ return p.diShi; } },
-      { lab:'自坐', cls:'sm', get:function(p){ return ziZuo(p.gan, p.zhi); } },
-      { lab:'纳音', cls:'sm', get:function(p){ return p.naYin; } },
-      { lab:'空亡', cls:'sm', get:function(p){ return p.xunKong; } },
-      { lab:'神煞', cls:'tiny', get:function(p){
-          var list = shenShaFor(p.zhi, [out.yearGan, out.dayGan], out.yearZhi, out.dayZhi);
-          return list.length ? list.join('·') : '—';
+      { lab:'藏干', cls:'sm', get:function(p){
+          return p.hide.map(function(h, k){
+            var ss = p.hideSS[k] || '';
+            return '<div class="hide-line"><span class="hz ' + gzColor(h) + '">' + h + '</span>' +
+              '<span class="ss ' + ssCls(ss) + '">' + ss + '</span></div>';
+          }).join('');
         } }
     ];
 
@@ -524,8 +527,7 @@
       ['命宫', ec.getMingGong() + '（' + ec.getMingGongNaYin() + '）'],
       ['胎元', ec.getTaiYuan() + '（' + ec.getTaiYuanNaYin() + '）'],
       ['身宫', ec.getShenGong() + '（' + ec.getShenGongNaYin() + '）'],
-      ['胎息', ec.getTaiXi() + '（' + ec.getTaiXiNaYin() + '）'],
-      ['旬空', '年 ' + ec.getYearXunKong() + ' · 月 ' + ec.getMonthXunKong() + ' · 日 ' + ec.getDayXunKong() + ' · 时 ' + ec.getTimeXunKong()]
+      ['胎息', ec.getTaiXi() + '（' + ec.getTaiXiNaYin() + '）']
     ];
     $('#aux').innerHTML = aux.map(function(a){ return '<span>' + a[0] + '<b>' + a[1] + '</b></span>'; }).join('');
 
@@ -555,7 +557,7 @@
       $('#dayun').innerHTML = out.dyList.map(function(d, i){
         return '<div class="dy' + (i === curIdx ? ' active' : '') + '" data-i="' + i + '" role="button" tabindex="0">' +
           '<div class="age">' + d.startAge + '–' + d.endAge + ' 岁</div>' +
-          '<div class="gzwrap"><div class="gz2"><i>' + d.ganZhi.charAt(0) + '</i><i>' + d.ganZhi.charAt(1) + '</i></div><div class="ss2">' + ssHtml(d.ss) + '</div></div>' +
+          '<div class="gzwrap"><div class="gz2"><i class="' + gzColor(d.ganZhi.charAt(0)) + '">' + d.ganZhi.charAt(0) + '</i><i class="' + gzColor(d.ganZhi.charAt(1)) + '">' + d.ganZhi.charAt(1) + '</i></div><div class="ss2">' + ssShortHtml(d.ss) + '</div></div>' +
           '<div class="yrs">' + d.startYear + '–' + d.endYear + '</div>' +
         '</div>';
       }).join('');
@@ -577,7 +579,7 @@
         if(ln.year === selYear) cls += ' sel';
         return '<div class="' + cls + '" data-year="' + ln.year + '">' +
           '<div class="y">' + ln.year + ' · ' + ln.age + '岁</div>' +
-          '<div class="cellrow">' + gzVert(ln.ganZhi) + '<div class="s">' + ssHtml(ln.ss) + '</div></div>' +
+          '<div class="cellrow">' + gzVert(ln.ganZhi) + '<div class="s">' + ssShortHtml(ln.ss) + '</div></div>' +
         '</div>';
       }).join('');
       centerIn($('#liunian'), '.sel');
@@ -616,7 +618,7 @@
         }
         return '<div class="' + cls + '" data-mi="' + i + '">' +
           '<div class="m">' + m.label + '</div>' +
-          '<div class="cellrow">' + gzVert(m.gz) + '<div class="s">' + ssHtml(shiShen(out.dayGan, m.gan)) + '</div></div>' +
+          '<div class="cellrow">' + gzVert(m.gz) + '<div class="s">' + ssShortHtml(shiShen(out.dayGan, m.gan)) + '</div></div>' +
           '<div class="d">' + m.jie + (md ? ' ' + md : '') + '</div>' +
         '</div>';
       }).join('');
@@ -643,7 +645,7 @@
         if(i === selDayIdx) cls += ' sel';
         return '<div class="' + cls + '" data-di="' + i + '">' +
           '<div class="y">' + d.md + '</div>' +
-          '<div class="cellrow">' + gzVert(d.gz) + '<div class="s">' + ssHtml(shiShen(out.dayGan, d.gan)) + '</div></div>' +
+          '<div class="cellrow">' + gzVert(d.gz) + '<div class="s">' + ssShortHtml(shiShen(out.dayGan, d.gan)) + '</div></div>' +
         '</div>';
       }).join('');
       centerIn($('#liuri'), '.sel');

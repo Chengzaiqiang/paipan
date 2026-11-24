@@ -180,9 +180,11 @@ input[type=checkbox]{accent-color:var(--accent)}
   border-bottom:1px solid var(--line);
 }
 .ch.lab{
-  text-align:right; color:var(--muted); font-size:9.5px; letter-spacing:.06em;
+  display:block; margin:0;
+  text-align:right; color:var(--muted); font-size:11px; letter-spacing:.06em;
   padding-right:8px; border-right:1px solid var(--line); background:var(--labelbg);
 }
+.ch.lab::after{content:none}
 .ch.lab .sf{display:none}
 .ch.h{
   font-size:9.5px; letter-spacing:.16em; color:var(--muted);
@@ -197,8 +199,8 @@ input[type=checkbox]{accent-color:var(--accent)}
   font-family:var(--font-gz);
   font-size:30px; line-height:1.2; font-weight:600;
 }
-.gz .wx-木{color:var(--wood)} .gz .wx-火{color:var(--fire)} .gz .wx-土{color:var(--earth)}
-.gz .wx-金{color:var(--metal)} .gz .wx-水{color:var(--water)}
+.gz .wx-木,.wx-木{color:var(--wood)} .gz .wx-火,.wx-火{color:var(--fire)} .gz .wx-土,.wx-土{color:var(--earth)}
+.gz .wx-金,.wx-金{color:var(--metal)} .gz .wx-水,.wx-水{color:var(--water)}
 .ss{font-size:11px; letter-spacing:.02em}
 .ss-bj{color:var(--ss-bj)} .ss-ss{color:var(--ss-ss)} .ss-cai{color:var(--ss-cai)}
 .ss-gs{color:var(--ss-gs)} .ss-yin{color:var(--ss-yin)} .ss-me{color:var(--ss-me)}
@@ -206,6 +208,9 @@ input[type=checkbox]{accent-color:var(--accent)}
 .tiny{font-size:9.5px; color:var(--muted); line-height:1.5}
 .tiny .ss{font-size:9.5px}
 .stack > div{line-height:1.45; white-space:nowrap}
+.hide-line{display:flex; align-items:baseline; justify-content:center; gap:4px; line-height:1.5}
+.hide-line .hz{font-family:var(--font-gz); font-size:13px; font-weight:600}
+.hide-line .ss{font-size:10px}
 
 .aux{display:flex; flex-wrap:wrap; gap:5px 20px; margin:10px 0 20px; font-size:11px; color:var(--muted)}
 .aux b{font-weight:450; color:var(--ink); margin-left:6px}
@@ -234,7 +239,7 @@ input[type=checkbox]{accent-color:var(--accent)}
 .dy .gzwrap{display:flex; align-items:center; justify-content:center; gap:5px; margin:2px 0 1px}
 .dy .gz2{display:flex; flex-direction:column; line-height:1.05; font-family:var(--font-gz); font-weight:600; font-size:21px}
 .dy .gz2 i{font-style:normal; display:block}
-.dy .ss2{writing-mode:vertical-rl; text-orientation:upright; font-size:9.5px; letter-spacing:1.5px; line-height:1}
+.dy .ss2{font-size:10px; line-height:1}
 .dy .yrs{font-size:9px; color:var(--muted); font-variant-numeric:tabular-nums; margin-top:2px}
 
 /* ---------- 流年 / 流月 / 流日 ---------- */
@@ -263,7 +268,7 @@ input[type=checkbox]{accent-color:var(--accent)}
 .g{display:flex; flex-direction:column; line-height:1.1; font-family:var(--font-gz); font-weight:600}
 .g i{font-style:normal; display:block}
 .ln .g{font-size:16px}
-.ln .s,.ly .s,.lr .s{writing-mode:vertical-rl; text-orientation:upright; letter-spacing:1px; line-height:1}
+.ln .s,.ly .s,.lr .s{line-height:1}
 .ln .s{font-size:9.5px}
 
 .liuyue,.liuri{
@@ -335,9 +340,11 @@ input[type=checkbox]{accent-color:var(--accent)}
   .chart{grid-template-columns:42px repeat(4,minmax(0,1fr))}
   .ch{padding:3px 2px}
   .ch.big{padding:4px 1px 3px}
-  .ch.lab{font-size:8.5px; padding-right:5px; letter-spacing:0}
+  .ch.lab{font-size:10px; padding-right:5px; letter-spacing:0}
   .ch.lab .lf{display:none}
   .ch.lab .sf{display:inline}
+  .hide-line .hz{font-size:11.5px}
+  .hide-line .ss{font-size:9px}
   .ch.h{font-size:8.5px; letter-spacing:.08em}
   .ss{font-size:9.5px}
   .tiny,.tiny .ss{font-size:8.5px}
